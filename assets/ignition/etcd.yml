@@ -1,0 +1,34 @@
+---
+networkd:
+  units:
+    - name: 10-static.network
+      contents: |
+        [Match]
+        MACAddress={{.interface.mac}}
+        [Network]
+        Gateway={{.interface.subnet.gateway}}
+        DNS={{ index .interface.subnet.dns 0 }}
+        Address={{ .interface.ipv4 }}
+
+systemd:
+  units:
+    {{- template "etcd2" .}}
+    - name: checkpoint.service
+      enable: true
+      contents: |
+        [Service]
+        ExecStart=/usr/bin/curl {{ Checkpoint }}
+        Restart=on-failure
+        RestartSec=5s
+        [Install]
+        WantedBy=multi-user.target
+
+{{ if index .host.metadata "ssh_authorized_keys" }}
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        {{ range $element := .host.metadata.ssh_authorized_keys }}
+        - {{$element}}
+        {{end}}
+{{end}}

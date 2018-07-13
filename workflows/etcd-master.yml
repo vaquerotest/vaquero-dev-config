@@ -1,0 +1,10 @@
+# Workflows chain a series of "boots" together. A host will
+# attach itself to a single workflow. A single "boot" is a
+# complete provisioning (bootloader & unattended config/install)
+id: etcd-master
+workflow:
+  - boot: etcd-master
+
+deps:
+  max_concurrent: 2 # Only 2 hosts my reprovision in this workflow at a time
+  min_standing: 1 # Unblocks dependant workflows once 1 host from this workflow is reprovisioned
