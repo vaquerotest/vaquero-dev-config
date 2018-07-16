@@ -1,2 +1,2 @@
-# vaquero-config-1
-config-1
+# vaquero-config-2
+config-2
