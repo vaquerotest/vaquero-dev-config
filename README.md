@@ -1,2 +1,2 @@
-# vaquero-dev-config
-config-2
+# vaquero-config-1
+config-1
